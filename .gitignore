@@ -4,10 +4,23 @@
 *.log
 *.pyc
 *.swp
+.DS_Store
+.atom/
+.build/
 .buildlog/
 .history
+.svn/
+.swiftpm/
+migrate_working_dir/
 
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
 
+# VS Code
+#.vscode/
 
 # Flutter repo-specific
 /bin/cache/
@@ -33,12 +46,13 @@ analysis_benchmark.json
 
 # Flutter/Dart/Pub related
 **/doc/api/
+**/generated_plugin_registrant.dart
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
-**/generated_plugin_registrant.dart
 .packages
 .pub-preload-cache/
+.pub-cache/
 .pub/
 build/
 flutter_*.png
@@ -56,6 +70,9 @@ unlinked_spec.ds
 **/android/**/GeneratedPluginRegistrant.java
 **/android/key.properties
 *.jks
+/android/app/debug
+/android/app/profile
+/android/app/release
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
@@ -107,8 +124,9 @@ unlinked_spec.ds
 # Coverage
 coverage/
 
-# Symbols
+# Symbolication & Obfuscation
 app.*.symbols
+app.*.map.json
 
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3
