@@ -45,5 +45,10 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+    <string>Esta app requiere acceso a la cámara para tomar fotos de las cebollas.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Esta app requiere acceso a tus fotos para seleccionar imágenes desde la galería.</string>
+
 </dict>
 </plist>
