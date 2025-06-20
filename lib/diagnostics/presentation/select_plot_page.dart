@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend_app/diagnostics/domain/plot.dart';
-import 'package:flutter_frontend_app/diagnostics/infrastructure/plot_api_service.dart';
-import 'package:flutter_frontend_app/diagnostics/presentation/result_page.dart';
+import '../domain/plot.dart';
+import '../infrastructure/plot_api_service.dart';
+import '../infrastructure/diagnosis_api_service.dart';
+import '../domain/diagnosis_result.dart';
+import 'result_page.dart';
 
 class SelectPlotPage extends StatefulWidget {
   final File imageFile;
@@ -15,6 +17,9 @@ class SelectPlotPage extends StatefulWidget {
 class _SelectPlotPageState extends State<SelectPlotPage> {
   Plot? _selectedPlot;
   late Future<List<Plot>> _plotsFuture;
+  final _nameController = TextEditingController();
+  final _commentsController = TextEditingController();
+  bool _loading = false;
 
   @override
   void initState() {
@@ -45,7 +50,7 @@ class _SelectPlotPageState extends State<SelectPlotPage> {
             autofocus: true,
             validator: (value) => (value == null || value.trim().isEmpty)
                 ? "El nombre es obligatorio"
-                : null,
+                : " ",
           ),
         ),
         actions: [
@@ -77,6 +82,40 @@ class _SelectPlotPageState extends State<SelectPlotPage> {
         ],
       ),
     );
+  }
+
+  Future<void> _sendDiagnosis() async {
+    if (_selectedPlot == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Debes seleccionar una parcela.")),
+      );
+      return;
+    }
+    setState(() => _loading = true);
+    try {
+      final result = await DiagnosisApiService().sendDiagnosisRequest(
+        image: widget.imageFile,
+        plotId: _selectedPlot!.id,
+        name: _nameController.text.trim(),
+        comments: _commentsController.text.trim(),
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ResultPage(
+            imageFile: widget.imageFile,
+            result: result,
+          ),
+        ),
+      );
+
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al enviar diagnóstico: $e')),
+      );
+    } finally {
+      setState(() => _loading = false);
+    }
   }
 
   @override
@@ -164,22 +203,29 @@ class _SelectPlotPageState extends State<SelectPlotPage> {
                 style: TextButton.styleFrom(foregroundColor: Colors.green.shade700),
               ),
             ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _nameController,
+              decoration: const InputDecoration(
+                labelText: 'Nombre de la evaluación (opcional)',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: _commentsController,
+              decoration: const InputDecoration(
+                labelText: 'Comentarios adicionales (opcional)',
+                border: OutlineInputBorder(),
+              ),
+              minLines: 1,
+              maxLines: 3,
+            ),
             const Spacer(),
-            ElevatedButton(
-              onPressed: () {
-                if (_selectedPlot == null) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Debes seleccionar una parcela.")),
-                  );
-                  return;
-                }
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ResultPage(imageFile: widget.imageFile),
-                  ),
-                );
-              },
+            _loading
+                ? const Center(child: CircularProgressIndicator())
+                : ElevatedButton(
+              onPressed: _sendDiagnosis,
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(48),
                 backgroundColor: Colors.green,

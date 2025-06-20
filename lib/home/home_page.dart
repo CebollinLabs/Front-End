@@ -4,6 +4,7 @@ import 'package:flutter_frontend_app/plots/presentation/list_plots_page.dart';
 import 'package:flutter_frontend_app/plots/application/plot_service.dart';
 import 'package:flutter_frontend_app/help/presentation/help_page.dart';
 import 'package:flutter_frontend_app/help/presentation/about_page.dart';
+import 'package:flutter_frontend_app/settings/presentation/settings_page.dart';
 
 class HomePage extends StatelessWidget {
   final String userName;
@@ -50,7 +51,10 @@ class HomePage extends StatelessWidget {
             icon: const Icon(Icons.settings),
             color: green,
             onPressed: () {
-              // TODO: Navegar a configuración
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SettingsPage()),
+              );
             },
           ),
           const SizedBox(width: 6),

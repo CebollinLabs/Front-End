@@ -7,22 +7,36 @@ import '../domain/diagnosis_result.dart';
 class DiagnosisApiService implements DiagnosisRepository {
   final String baseUrl;
 
-  DiagnosisApiService({this.baseUrl = "http://54.146.166.81:8000"});
+  DiagnosisApiService({this.baseUrl = "http://192.168.100.47:8000"});
 
   @override
-  Future<DiagnosisResult> sendImage(File image) async {
-    var uri = Uri.parse("$baseUrl/predict");
-    var request = http.MultipartRequest('POST', uri);
-    request.files.add(await http.MultipartFile.fromPath('file', image.path));
+  Future<DiagnosisResult> sendDiagnosisRequest({
+    required File image,
+    required String plotId,
+    String name = '',
+    String comments = '',
+  }) async {
+    final uri = Uri.parse('$baseUrl/api/v1/diagnosis-requests/');
+    final request = http.MultipartRequest('POST', uri);
+
+    print("image: ${image.path}");
+    print("plot_id: $plotId");
+    print("name: $name");
+    print("comments: $comments");
+
+    request.files.add(await http.MultipartFile.fromPath('image', image.path));
+    request.fields['plot_id'] = plotId;
+    request.fields['name'] = name;
+    request.fields['comments'] = comments;
 
     final streamedResponse = await request.send();
     final response = await http.Response.fromStream(streamedResponse);
 
-    if (response.statusCode == 200) {
-      // PARSEA DIRECTO A DiagnosisResult
+    if (response.statusCode == 201 || response.statusCode == 200) {
       return DiagnosisResult.fromJson(json.decode(response.body));
     } else {
-      throw Exception("Error al obtener diagnóstico: ${response.body}");
+      throw Exception("Error al enviar diagnóstico: ${response.body}");
     }
   }
+
 }
