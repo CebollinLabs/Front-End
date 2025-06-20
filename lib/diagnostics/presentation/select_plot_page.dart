@@ -1,15 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend_app/diagnostics/domain/plot.dart';
+import 'package:flutter_frontend_app/diagnostics/infrastructure/plot_api_service.dart';
 import 'package:flutter_frontend_app/diagnostics/presentation/result_page.dart';
-
-
 
 class SelectPlotPage extends StatefulWidget {
   final File imageFile;
-  final List<Plot> plots;
-
-  const SelectPlotPage({Key? key, required this.imageFile, required this.plots}) : super(key: key);
+  const SelectPlotPage({Key? key, required this.imageFile}) : super(key: key);
 
   @override
   State<SelectPlotPage> createState() => _SelectPlotPageState();
@@ -17,12 +14,74 @@ class SelectPlotPage extends StatefulWidget {
 
 class _SelectPlotPageState extends State<SelectPlotPage> {
   Plot? _selectedPlot;
-  // Si deseas un campo de nota rápida, puedes agregar: String? _note;
+  late Future<List<Plot>> _plotsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _plotsFuture = PlotApiService().fetchPlots();
+  }
+
+  Future<void> _showAddPlotDialog() async {
+    final controller = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+    final borderColor = Colors.green.shade200;
+
+    await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Agregar nueva parcela"),
+        content: Form(
+          key: formKey,
+          child: TextFormField(
+            controller: controller,
+            decoration: InputDecoration(
+              labelText: "Nombre de la parcela",
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: borderColor)),
+            ),
+            autofocus: true,
+            validator: (value) => (value == null || value.trim().isEmpty)
+                ? "El nombre es obligatorio"
+                : null,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Cancelar"),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (!formKey.currentState!.validate()) return;
+              try {
+                await PlotApiService().createPlot(controller.text.trim());
+                setState(() {
+                  _plotsFuture = PlotApiService().fetchPlots();
+                });
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Parcela creada con éxito')),
+                );
+              } catch (e) {
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('No se pudo crear la parcela')),
+                );
+              }
+            },
+            child: const Text("Agregar"),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final borderColor = Colors.green.shade200;
-
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(),
@@ -65,51 +124,46 @@ class _SelectPlotPageState extends State<SelectPlotPage> {
               style: TextStyle(color: Colors.grey[700], fontSize: 16),
             ),
             const SizedBox(height: 8),
-            DropdownButtonFormField<Plot>(
-              value: _selectedPlot,
-              items: widget.plots
-                  .map(
-                    (plot) => DropdownMenuItem(
-                  value: plot,
-                  child: Text(plot.name),
-                ),
-              )
-                  .toList(),
-              onChanged: (plot) {
-                setState(() {
-                  _selectedPlot = plot;
-                });
+            FutureBuilder<List<Plot>>(
+              future: _plotsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting)
+                  return const Center(child: CircularProgressIndicator());
+                if (snapshot.hasError)
+                  return Center(child: Text('Error al cargar parcelas'));
+
+                final plots = snapshot.data ?? [];
+                return DropdownButtonFormField<Plot>(
+                  value: _selectedPlot,
+                  items: plots
+                      .map((plot) => DropdownMenuItem(
+                    value: plot,
+                    child: Text(plot.name),
+                  ))
+                      .toList(),
+                  onChanged: (plot) {
+                    setState(() {
+                      _selectedPlot = plot;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    hintText: "Elige una parcela",
+                  ),
+                );
               },
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                hintText: "Elige una parcela",
-              ),
             ),
             const SizedBox(height: 12),
             Align(
               alignment: Alignment.centerLeft,
               child: TextButton.icon(
-                onPressed: () {
-                  // Aquí puedes navegar a la pantalla de agregar parcela
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Funcionalidad de agregar parcela (pendiente)')),
-                  );
-                },
+                onPressed: _showAddPlotDialog,
                 icon: const Icon(Icons.add),
                 label: const Text("Agregar nueva parcela"),
                 style: TextButton.styleFrom(foregroundColor: Colors.green.shade700),
               ),
             ),
-            // Campo de nota opcional (puedes descomentar si quieres usarlo)
-            // const SizedBox(height: 8),
-            // TextField(
-            //   decoration: InputDecoration(
-            //     labelText: "Comentario adicional (opcional)",
-            //     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-            //   ),
-            //   onChanged: (value) => _note = value,
-            // ),
             const Spacer(),
             ElevatedButton(
               onPressed: () {

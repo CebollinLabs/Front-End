@@ -72,10 +72,10 @@ class PreviewPage extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (_) => SelectPlotPage(
                       imageFile: imageFile,
-                      plots: plots,
                     ),
                   ),
                 );
+
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(48),
