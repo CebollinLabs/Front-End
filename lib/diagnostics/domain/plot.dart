@@ -4,15 +4,15 @@ class Plot {
 
   Plot({required this.id, required this.name});
 
-  // Constructor para parsear desde JSON (de la API)
+  // Factory constructor to create a Plot from JSON
   factory Plot.fromJson(Map<String, dynamic> json) {
     return Plot(
-      id: json['id'] as String,
-      name: json['name'] as String,
+      id: json['id'].toString(),   // convert to String just in case
+      name: json['name'] ?? '',
     );
   }
 
-  // Si quieres convertir de Plot a JSON (útil para POST/PUT)
+  // Optional: convert Plot back to JSON (useful for POST/PUT)
   Map<String, dynamic> toJson() {
     return {
       'id': id,

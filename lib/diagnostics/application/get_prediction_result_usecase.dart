@@ -1,4 +1,4 @@
-// application/send_image_usecase.dart
+// send_image_usecase.dart
 import 'dart:io';
 import '../domain/diagnosis_repository.dart';
 import '../domain/diagnosis_result.dart';
