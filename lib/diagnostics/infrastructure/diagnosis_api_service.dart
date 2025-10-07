@@ -1,13 +1,19 @@
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../domain/diagnosis_repository.dart';
 import '../domain/diagnosis_result.dart';
 
 class DiagnosisApiService implements DiagnosisRepository {
   final String baseUrl;
 
-  DiagnosisApiService({this.baseUrl = "http://34.230.19.17:8000"});
+  DiagnosisApiService({String? baseUrl})
+      : baseUrl = baseUrl ?? (dotenv.env['DIAGNOSIS_API_URL'] ?? '') {
+    if (this.baseUrl.isEmpty) {
+      throw StateError('DIAGNOSIS_API_URL no está definido en el entorno (.env o --dart-define).');
+    }
+  }
 
   @override
   Future<DiagnosisResult> sendImage(File image) async {

@@ -135,3 +135,45 @@ app.*.map.json
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 !/dev/ci/**/Gemfile.lock
+# === Configuración por entorno y secretos ===
+.env
+.env.*
+*.env
+*.env.*
+*.secrets.*
+*.credentials.*
+
+# iOS signing / certificados
+*.p12
+*.mobileprovision
+*.cer
+
+# Firebase (ignóralos si los gestionas fuera del repo)
+**/android/app/google-services.json
+**/ios/Runner/GoogleService-Info.plist
+
+# Fastlane (si usas para releases)
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots/
+
+# FVM (Flutter Version Manager)
+.fvm/
+.dart_tool/package_config.json # (ya cubierto por .dart_tool/, redundante pero ok)
+
+# VS Code / Fleet (si prefieres no versionar ajustes locales)
+.vscode/
+.fleet/
+
+# Direnv
+.envrc
+
+# Otros binarios de llaves Android (además de *.jks)
+*.keystore
+*.keystore.*
+
+# Mapas de sourcemaps web adicionales (por si generas nombres distintos)
+**/web/**/*.map
+
+# Node (por si hay subcarpetas con tooling web)
+**/node_modules/
