@@ -5,10 +5,13 @@ import 'package:flutter_frontend_app/plots/application/plot_service.dart';
 import 'package:flutter_frontend_app/help/presentation/help_page.dart';
 import 'package:flutter_frontend_app/help/presentation/about_page.dart';
 import 'package:flutter_frontend_app/settings/presentation/settings_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_frontend_app/history/presentation/diagnosis_list.dart';
+
 
 class HomePage extends StatelessWidget {
   final String userName;
-  final PlotService plotService; // <--- NUEVO
+  final PlotService plotService; 
 
   const HomePage({Key? key, required this.userName, required this.plotService}) : super(key: key);
 
@@ -141,9 +144,22 @@ class HomePage extends StatelessWidget {
                     title: 'Historial de diagnósticos',
                     subtitle: 'Consulta resultados pasados',
                     onTap: () {
-                      // TODO: Navegar a historial
+                      final baseUrl = dotenv.env['PLOTS_API_URL'] ?? '';
+                      if (baseUrl.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Falta PLOTS_API_URL en .env')),
+                        );
+                        return;
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DiagnosisListScreen(baseUrl: baseUrl),
+                        ),
+                      );
                     },
                   ),
+
                 ],
               ),
             ),
