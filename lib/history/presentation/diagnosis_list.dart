@@ -16,7 +16,7 @@ class DiagnosisListScreen extends StatefulWidget {
 class _DiagnosisListScreenState extends State<DiagnosisListScreen> with SingleTickerProviderStateMixin {
   late Future<List<DiagnosisRequest>> _future;
   late AnimationController _fabController;
-  
+
   // Filtros
   String? _selectedDisease;
   String? _selectedPlot;
@@ -47,23 +47,23 @@ class _DiagnosisListScreenState extends State<DiagnosisListScreen> with SingleTi
   void _applyFilters() {
     _filteredItems = _allItems.where((item) {
       final vm = toCardVM(item);
-      
+
       // Filtro por tipo de enfermedad
       if (_selectedDisease != null && vm.diseaseLabel != _selectedDisease) {
         return false;
       }
-      
+
       // Filtro por lote (plotName)
       if (_selectedPlot != null && vm.plotName != _selectedPlot) {
         return false;
       }
-      
+
       // Filtro por fecha
       if (_dateRange != null) {
         try {
           final itemDate = _parseDate(vm.day);
-          if (itemDate == null || 
-              itemDate.isBefore(_dateRange!.start) || 
+          if (itemDate == null ||
+              itemDate.isBefore(_dateRange!.start) ||
               itemDate.isAfter(_dateRange!.end.add(const Duration(days: 1)))) {
             return false;
           }
@@ -71,7 +71,7 @@ class _DiagnosisListScreenState extends State<DiagnosisListScreen> with SingleTi
           return true;
         }
       }
-      
+
       return true;
     }).toList();
   }
@@ -149,7 +149,7 @@ class _DiagnosisListScreenState extends State<DiagnosisListScreen> with SingleTi
   @override
   Widget build(BuildContext context) {
   final hasActiveFilters = _selectedDisease != null || _selectedPlot != null || _dateRange != null;
-    
+
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
@@ -733,7 +733,7 @@ class _ShimmerCardState extends State<_ShimmerCard> with SingleTickerProviderSta
 class _EmptyState extends StatelessWidget {
   final VoidCallback onRetry;
   final bool hasFilters;
-  
+
   const _EmptyState({required this.onRetry, this.hasFilters = false});
 
   @override
