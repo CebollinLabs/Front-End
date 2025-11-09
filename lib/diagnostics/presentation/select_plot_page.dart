@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend_app/utils/color_ext.dart';
 import '../domain/plot.dart';
 import '../infrastructure/plot_api_service.dart';
 import '../infrastructure/diagnosis_api_service.dart';
-import '../domain/diagnosis_result.dart';
 import 'result_page.dart';
 
 class SelectPlotPage extends StatefulWidget {
@@ -11,10 +11,10 @@ class SelectPlotPage extends StatefulWidget {
   final List<Plot>? plots;
 
   const SelectPlotPage({
-    Key? key,
+    super.key,
     required this.imageFile,
     this.plots,
-  }) : super(key: key);
+  });
 
   @override
   State<SelectPlotPage> createState() => _SelectPlotPageState();
@@ -127,6 +127,7 @@ class _SelectPlotPageState extends State<SelectPlotPage> {
                         if (!formKey.currentState!.validate()) return;
                         try {
                           await PlotApiService().createPlot(controller.text.trim());
+                          if (!mounted) return;
                           setState(() {
                             _plotsFuture = PlotApiService().fetchPlots();
                           });
@@ -148,6 +149,7 @@ class _SelectPlotPageState extends State<SelectPlotPage> {
                             ),
                           );
                         } catch (e) {
+                          if (!mounted) return;
                           Navigator.of(context).pop();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -215,6 +217,7 @@ class _SelectPlotPageState extends State<SelectPlotPage> {
     setState(() => _loading = true);
     try {
       final result = await DiagnosisApiService().sendImage(widget.imageFile);
+      if (!mounted) return;
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -225,6 +228,7 @@ class _SelectPlotPageState extends State<SelectPlotPage> {
         ),
       );
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(
@@ -296,7 +300,7 @@ class _SelectPlotPageState extends State<SelectPlotPage> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withOpacitySafe(0.05),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -322,7 +326,7 @@ class _SelectPlotPageState extends State<SelectPlotPage> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withOpacitySafe(0.05),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -382,7 +386,7 @@ class _SelectPlotPageState extends State<SelectPlotPage> {
 
                         final plots = snapshot.data ?? [];
                         return DropdownButtonFormField<Plot>(
-                          value: _selectedPlot,
+                          initialValue: _selectedPlot,
                           items: plots
                               .map((plot) => DropdownMenuItem(
                             value: plot,
@@ -466,7 +470,7 @@ class _SelectPlotPageState extends State<SelectPlotPage> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withOpacitySafe(0.05),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
@@ -587,7 +591,7 @@ class _SelectPlotPageState extends State<SelectPlotPage> {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   elevation: 0,
-                  shadowColor: Colors.green.withOpacity(0.3),
+                  shadowColor: Colors.green.withOpacitySafe(0.3),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,

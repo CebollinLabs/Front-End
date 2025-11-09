@@ -4,7 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter_frontend_app/diagnostics/presentation/preview_page.dart';
 
 class CameraGuidePage extends StatefulWidget {
-  const CameraGuidePage({Key? key}) : super(key: key);
+  const CameraGuidePage({super.key});
 
   @override
   State<CameraGuidePage> createState() => _CameraGuidePageState();

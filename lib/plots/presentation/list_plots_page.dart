@@ -5,7 +5,7 @@ import 'plot_form_page.dart';
 
 class ListPlotsPage extends StatefulWidget {
   final PlotService service;
-  const ListPlotsPage({Key? key, required this.service}) : super(key: key);
+  const ListPlotsPage({super.key, required this.service});
 
   @override
   State<ListPlotsPage> createState() => _ListPlotsPageState();
@@ -67,10 +67,12 @@ class _ListPlotsPageState extends State<ListPlotsPage> {
               child: FutureBuilder<List<Plot>>(
                 future: _plotsFuture,
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting)
+                  if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
-                  if (snapshot.hasError)
+                  }
+                  if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
+                  }
 
                   final plots = snapshot.data ?? [];
                   if (plots.isEmpty) {
@@ -119,11 +121,11 @@ class _ListPlotsPageState extends State<ListPlotsPage> {
         child: FloatingActionButton(
           backgroundColor: Colors.green,
           onPressed: () => _openPlotForm(),
-          child: const Icon(Icons.add, size: 32, color: Colors.white),
           tooltip: 'Agregar parcela',
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18)),
           elevation: 3,
+          child: const Icon(Icons.add, size: 32, color: Colors.white),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

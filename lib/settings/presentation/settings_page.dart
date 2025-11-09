@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -47,14 +47,14 @@ class _SettingsPageState extends State<SettingsPage> {
                   subtitle: const Text("Evita consumo de datos móviles"),
                   value: wifiOnly,
                   onChanged: (v) => setState(() => wifiOnly = v),
-                  activeColor: green,
+                  activeThumbColor: green,
                 ),
                 SwitchListTile(
                   title: const Text("Sincronización offline"),
                   subtitle: const Text("Permite uso sin conexión y sincroniza al estar online"),
                   value: offlineSync,
                   onChanged: (v) => setState(() => offlineSync = v),
-                  activeColor: green,
+                  activeThumbColor: green,
                 ),
                 ListTile(
                   title: const Text("Estado de sincronización"),
@@ -95,7 +95,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   subtitle: const Text("Incluye alertas de diagnóstico y novedades"),
                   value: notificationsEnabled,
                   onChanged: (v) => setState(() => notificationsEnabled = v),
-                  activeColor: green,
+                  activeThumbColor: green,
                 ),
                 ListTile(
                   title: const Text("Idioma de la aplicación"),

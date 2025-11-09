@@ -7,7 +7,7 @@ import 'camera_guide_page.dart';
 class PreviewPage extends StatelessWidget {
   final File imageFile;
 
-  const PreviewPage({Key? key, required this.imageFile}) : super(key: key);
+  const PreviewPage({super.key, required this.imageFile});
 
   @override
   Widget build(BuildContext context) {

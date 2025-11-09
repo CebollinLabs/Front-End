@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend_app/utils/color_ext.dart';
 import '../domain/diagnosis_result.dart';
 import './treatment_page.dart';
 
@@ -8,10 +9,10 @@ class ResultPage extends StatelessWidget {
   final DiagnosisResult result;
 
   const ResultPage({
-    Key? key,
+    super.key,
     required this.imageFile,
     required this.result,
-  }) : super(key: key);
+  });
 
   Color _getConfidenceColor(double confidence) {
     if (confidence >= 0.8) return Colors.green;
@@ -76,7 +77,7 @@ class ResultPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.15),
+                      color: Colors.black.withOpacitySafe(0.15),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),
@@ -103,10 +104,10 @@ class ResultPage extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       decoration: BoxDecoration(
-                        color: _getConfidenceColor(prediction.confidence).withOpacity(0.15),
+                        color: _getConfidenceColor(prediction.confidence).withOpacitySafe(0.15),
                         borderRadius: BorderRadius.circular(30),
                         border: Border.all(
-                          color: _getConfidenceColor(prediction.confidence).withOpacity(0.3),
+                          color: _getConfidenceColor(prediction.confidence).withOpacitySafe(0.3),
                           width: 1.5,
                         ),
                       ),
@@ -141,7 +142,7 @@ class ResultPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.06),
+                            color: Colors.black.withOpacitySafe(0.06),
                             blurRadius: 15,
                             offset: const Offset(0, 4),
                           ),
@@ -197,13 +198,13 @@ class ResultPage extends StatelessWidget {
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
-                            _getConfidenceColor(prediction.confidence).withOpacity(0.12),
-                            _getConfidenceColor(prediction.confidence).withOpacity(0.05),
+                            _getConfidenceColor(prediction.confidence).withOpacitySafe(0.12),
+                            _getConfidenceColor(prediction.confidence).withOpacitySafe(0.05),
                           ],
                         ),
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(
-                          color: _getConfidenceColor(prediction.confidence).withOpacity(0.3),
+                          color: _getConfidenceColor(prediction.confidence).withOpacitySafe(0.3),
                           width: 2,
                         ),
                       ),
@@ -214,7 +215,7 @@ class ResultPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "${(prediction.confidence * 100).toStringAsFixed(1)}",
+                                (prediction.confidence * 100).toStringAsFixed(1),
                                 style: TextStyle(
                                   fontSize: 56,
                                   fontWeight: FontWeight.bold,
@@ -261,13 +262,13 @@ class ResultPage extends StatelessWidget {
                                   gradient: LinearGradient(
                                     colors: [
                                       _getConfidenceColor(prediction.confidence),
-                                      _getConfidenceColor(prediction.confidence).withOpacity(0.7),
+                                      _getConfidenceColor(prediction.confidence).withOpacitySafe(0.7),
                                     ],
                                   ),
                                   borderRadius: BorderRadius.circular(10),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: _getConfidenceColor(prediction.confidence).withOpacity(0.4),
+                                      color: _getConfidenceColor(prediction.confidence).withOpacitySafe(0.4),
                                       blurRadius: 8,
                                       offset: const Offset(0, 2),
                                     ),
@@ -359,7 +360,7 @@ class ResultPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(16),
                             ),
                             elevation: 2,
-                            shadowColor: Colors.green.withOpacity(0.4),
+                            shadowColor: Colors.green.withOpacitySafe(0.4),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,

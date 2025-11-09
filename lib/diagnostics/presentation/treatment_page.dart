@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../infrastructure/treatment_api_service.dart';
 
 class TreatmentPage extends StatefulWidget {
-  const TreatmentPage({Key? key}) : super(key: key);
+  const TreatmentPage({super.key});
 
   @override
   State<TreatmentPage> createState() => _TreatmentPageState();
@@ -99,7 +99,7 @@ class _TreatmentPageState extends State<TreatmentPage> {
                 entry.key,
                 entry.value.toString(),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),

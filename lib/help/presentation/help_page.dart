@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend_app/utils/color_ext.dart';
 
 class HelpPage extends StatelessWidget {
-  const HelpPage({Key? key}) : super(key: key);
+  const HelpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +84,7 @@ class _FAQCardState extends State<_FAQCard> {
         onTap: () => setState(() => expanded = !expanded),
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(color: widget.green.withOpacity(0.2), width: 1.2),
+            border: Border.all(color: widget.green.withOpacitySafe(0.2), width: 1.2),
             borderRadius: BorderRadius.circular(16),
             color: Colors.white,
           ),
@@ -115,7 +116,7 @@ class _FAQCardState extends State<_FAQCard> {
               ),
               if (expanded) ...[
                 const SizedBox(height: 10),
-                Divider(height: 1, color: widget.green.withOpacity(0.12)),
+                Divider(height: 1, color: widget.green.withOpacitySafe(0.12)),
                 const SizedBox(height: 6),
                 Text(
                   widget.faq.answer,

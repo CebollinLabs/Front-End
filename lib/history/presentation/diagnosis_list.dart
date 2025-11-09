@@ -1,5 +1,6 @@
 // presentation/diagnosis_list.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend_app/utils/color_ext.dart';
 import '../infrastructure/api.dart';
 import '../domain/models.dart';
 import '../application/usecases.dart';
@@ -320,10 +321,10 @@ class _FilterChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(left: 12, right: 4, top: 6, bottom: 6),
       decoration: BoxDecoration(
-        color: Theme.of(context).primaryColor.withOpacity(0.1),
+                      color: Theme.of(context).primaryColor.withOpacitySafe(0.1),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: Theme.of(context).primaryColor.withOpacity(0.3),
+          color: Theme.of(context).primaryColor.withOpacitySafe(0.3),
         ),
       ),
       child: Row(
@@ -490,7 +491,7 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                           _tempDisease = selected ? disease : null;
                         });
                       },
-                      selectedColor: Theme.of(context).primaryColor.withOpacity(0.2),
+                      selectedColor: Theme.of(context).primaryColor.withOpacitySafe(0.2),
                       labelStyle: TextStyle(
                         fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                         color: isSelected ? Theme.of(context).primaryColor : Colors.grey.shade700,
@@ -518,7 +519,7 @@ class _FilterBottomSheetState extends State<_FilterBottomSheet> {
                             _tempPlot = selected ? plot : null;
                           });
                         },
-                        selectedColor: Theme.of(context).primaryColor.withOpacity(0.2),
+                        selectedColor: Theme.of(context).primaryColor.withOpacitySafe(0.2),
                         labelStyle: TextStyle(
                           fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                           color: isSelected ? Theme.of(context).primaryColor : Colors.grey.shade700,
@@ -700,7 +701,7 @@ class _ShimmerCardState extends State<_ShimmerCard> with SingleTickerProviderSta
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
+                  color: Colors.black.withOpacitySafe(0.04),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -831,8 +832,8 @@ class _DiagnosisCardState extends State<DiagnosisCard> with SingleTickerProvider
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                BoxShadow(
+                color: Colors.black.withOpacitySafe(0.06),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -915,7 +916,7 @@ class _ConfidenceChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [color.withOpacity(0.15), color.withOpacity(0.08)],
+          colors: [color.withOpacitySafe(0.15), color.withOpacitySafe(0.08)],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color, width: 1.5),

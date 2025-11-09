@@ -6,14 +6,15 @@ import 'package:flutter_frontend_app/help/presentation/help_page.dart';
 import 'package:flutter_frontend_app/help/presentation/about_page.dart';
 import 'package:flutter_frontend_app/settings/presentation/settings_page.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_frontend_app/utils/color_ext.dart';
 import 'package:flutter_frontend_app/history/presentation/diagnosis_list.dart';
 
 
 class HomePage extends StatelessWidget {
   final String userName;
-  final PlotService plotService; 
+  final PlotService plotService;
 
-  const HomePage({Key? key, required this.userName, required this.plotService}) : super(key: key);
+  const HomePage({super.key, required this.userName, required this.plotService});
 
   @override
   Widget build(BuildContext context) {
@@ -198,14 +199,14 @@ class _MainFunctionCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: color.withOpacity(0.25), width: 1.1),
+            border: Border.all(color: color.withOpacitySafe(0.25), width: 1.1),
           ),
           child: Row(
             children: [
               CircleAvatar(
-                backgroundColor: color.withOpacity(0.12),
-                child: Icon(icon, color: color, size: 36),
+                backgroundColor: color.withOpacitySafe(0.12),
                 radius: 32,
+                child: Icon(icon, color: color, size: 36),
               ),
               const SizedBox(width: 20),
               Expanded(

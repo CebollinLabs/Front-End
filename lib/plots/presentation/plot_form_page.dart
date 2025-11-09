@@ -7,7 +7,7 @@ class PlotFormPage extends StatefulWidget {
   final PlotService service;
   final Plot? plot; // null para crear, con Plot para editar
 
-  const PlotFormPage({Key? key, required this.service, this.plot}) : super(key: key);
+  const PlotFormPage({super.key, required this.service, this.plot});
 
   @override
   State<PlotFormPage> createState() => _PlotFormPageState();
@@ -29,16 +29,20 @@ class _PlotFormPageState extends State<PlotFormPage> {
     setState(() => _loading = true);
 
     try {
+      final localContext = context;
       if (widget.plot == null) {
         await widget.service.createPlot(_nameController.text);
-        await showConfirmationDialog(context, "¡Parcela creada con éxito!");
+        await showConfirmationDialog(localContext, "¡Parcela creada con éxito!");
       } else {
         await widget.service.updatePlot(widget.plot!.id, _nameController.text);
-        await showConfirmationDialog(context, "¡Parcela actualizada con éxito!");
+        await showConfirmationDialog(localContext, "¡Parcela actualizada con éxito!");
       }
+      if (!mounted) return;
       Navigator.of(context).pop(true);
     } catch (e) {
-      await showConfirmationDialog(context, "Ocurrió un error: $e");
+      final localContext = context;
+      await showConfirmationDialog(localContext, "Ocurrió un error: $e");
+      if (!mounted) return;
     } finally {
       setState(() => _loading = false);
     }
